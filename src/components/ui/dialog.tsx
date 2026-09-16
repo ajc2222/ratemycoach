@@ -90,7 +90,7 @@ export function Dialog({
 
   return (
     <div
-      className="bg-ink/80 fixed inset-0 z-50 flex items-end justify-center overflow-y-auto p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      className="bg-navy/55 fade-in fixed inset-0 z-50 flex items-end justify-center overflow-y-auto p-0 backdrop-blur-sm sm:items-center sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
@@ -103,7 +103,7 @@ export function Dialog({
         aria-describedby={description ? descriptionId : undefined}
         tabIndex={-1}
         className={cx(
-          "border-line bg-surface relative w-full max-w-lg rounded-t-2xl border p-5 shadow-2xl",
+          "border-line bg-surface max-sm:sheet-in sm:fade-in relative w-full max-w-lg rounded-t-2xl border p-5 shadow-2xl",
           "sm:rounded-[var(--radius-card)] sm:p-6",
           "max-h-[92vh] overflow-y-auto",
         )}

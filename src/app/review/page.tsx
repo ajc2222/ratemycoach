@@ -4,7 +4,6 @@ import { Suspense } from "react";
 
 import { ReviewForm } from "@/components/forms/review-form";
 import { Card } from "@/components/ui/primitives";
-import { copy } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Review a coach — privately",
@@ -13,61 +12,50 @@ export const metadata: Metadata = {
   alternates: { canonical: "/review" },
 };
 
+const PRIVACY_POINTS = [
+  // Exact wording matters: this is the privacy promise shown before any field.
+  "Your submission will not be publicly posted automatically.",
+  "Your email is never made public.",
+  "No receipts or screenshots needed.",
+];
+
 export default function ReviewPage() {
   return (
     <div className="container-page py-10 sm:py-16">
       <div className="prose-page mx-auto">
-        <p className="text-accent text-xs font-semibold tracking-[0.18em] uppercase">
+        <p className="text-accent text-xs font-bold tracking-[0.16em] uppercase">
           Founding reviews
         </p>
         <h1 className="mt-2 text-3xl sm:text-4xl">
           Write the review you wish you&apos;d been able to read
         </h1>
         <p className="text-muted mt-4 text-lg">
-          Before you paid that coach, you probably searched for what their clients said and
-          found transformation photos. This is the other side of that.
+          Tell future athletes what the coaching was actually like.
         </p>
       </div>
 
-      <Card className="border-accent/30 bg-accent/5 mx-auto mt-8 max-w-2xl">
-        <h2 className="font-display text-lg">What happens to what you write</h2>
-        <p className="text-muted mt-3 text-sm">{copy.reviewPrivacy}</p>
-        <ul className="text-muted mt-4 space-y-2 text-sm">
-          <li className="flex gap-2">
-            <span aria-hidden="true" className="text-accent">
-              ·
+      <Card className="mx-auto mt-8 max-w-2xl">
+        <h2 className="text-lg">Your review stays private</h2>
+        <ul className="text-muted mt-3 space-y-2 text-sm">
+          {PRIVACY_POINTS.map((point) => (
+            <li key={point} className="flex items-start gap-2.5">
+              <span aria-hidden="true" className="text-accent font-bold">
+                ✓
+              </span>
+              <span>{point}</span>
+            </li>
+          ))}
+          <li className="flex items-start gap-2.5">
+            <span aria-hidden="true" className="text-accent font-bold">
+              ✓
             </span>
-            It is stored privately and is not visible on this site to anyone.
-          </li>
-          <li className="flex gap-2">
-            <span aria-hidden="true" className="text-accent">
-              ·
+            <span>
+              Deleted any time —{" "}
+              <Link href="/contact" className="text-accent underline underline-offset-4">
+                just ask
+              </Link>
+              .
             </span>
-            It is never published automatically — publication needs your separate permission
-            <em> and </em> moderation <em>and</em> verification, none of which exist yet.
-          </li>
-          <li className="flex gap-2">
-            <span aria-hidden="true" className="text-accent">
-              ·
-            </span>
-            Your email is never attached to anything public.
-          </li>
-          <li className="flex gap-2">
-            <span aria-hidden="true" className="text-accent">
-              ·
-            </span>
-            We don&apos;t ask for receipts, screenshots or documents. Not during validation — we
-            haven&apos;t built somewhere safe to keep them.
-          </li>
-          <li className="flex gap-2">
-            <span aria-hidden="true" className="text-accent">
-              ·
-            </span>
-            You can have it deleted at any time by{" "}
-            <Link href="/contact" className="text-accent underline underline-offset-4">
-              emailing us
-            </Link>
-            .
           </li>
         </ul>
       </Card>

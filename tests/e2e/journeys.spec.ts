@@ -35,6 +35,11 @@ async function expectEvent(getEvents: () => string[], name: string) {
     .toContain(name);
 }
 
+/** The review form shows one step at a time. */
+async function continueReview(page: Page) {
+  await page.getByRole("button", { name: "Continue" }).click();
+}
+
 /** Forms have a minimum time-to-submit bot trap; a real person clears it easily. */
 async function clearBotTimer(page: Page) {
   await page.waitForTimeout(1400);
@@ -215,10 +220,12 @@ test.describe("Journey B — former client", () => {
 
     await page.getByLabel("Coach or team name").fill("A Former Coach");
     await page.getByRole("radio", { name: "Former client" }).check();
+    await continueReview(page);
     await page.getByRole("checkbox", { name: "Contest prep" }).check();
     await page.getByRole("checkbox", { name: "Posing", exact: true }).check();
     await page.getByLabel("Your division").selectOption("bikini");
     await page.getByRole("radio", { name: "Natural", exact: true }).check();
+    await continueReview(page);
 
     for (const rating of [
       "Overall experience",
@@ -243,6 +250,7 @@ test.describe("Journey B — former client", () => {
         "The first four weeks were clearly a template and it only became individualised after I asked directly about it.",
       );
     await page.getByRole("radio", { name: "Maybe / with caveats" }).check();
+    await continueReview(page);
     await page.getByLabel("Your email").fill(`reviewer-${Date.now()}@example.com`);
     await page
       .getByRole("checkbox", { name: /I confirm this is my own firsthand experience/ })
@@ -264,9 +272,11 @@ test.describe("Journey B — former client", () => {
 
     await page.getByLabel("Coach or team name").fill("Another Coach");
     await page.getByRole("radio", { name: "Former client" }).check();
+    await continueReview(page);
     await page.getByRole("checkbox", { name: "Contest prep" }).check();
     await page.getByLabel("Your division").selectOption("bikini");
     await page.getByRole("radio", { name: "Natural", exact: true }).check();
+    await continueReview(page);
     for (const rating of [
       "Overall experience",
       "Communication",
@@ -289,6 +299,7 @@ test.describe("Journey B — former client", () => {
         "He is a scammer who defrauded me out of thousands of pounds and everyone knows it.",
       );
     await page.getByRole("radio", { name: "No", exact: true }).check();
+    await continueReview(page);
     await page.getByLabel("Your email").fill("blocked@example.com");
     await page
       .getByRole("checkbox", { name: /I confirm this is my own firsthand experience/ })
@@ -305,10 +316,11 @@ test.describe("Journey B — former client", () => {
   test("validation errors are shown per field and keep entered values", async ({ page }) => {
     await page.goto("/review");
     await page.getByLabel("Coach or team name").fill("Some Coach");
-    await clearBotTimer(page);
-    await page.getByRole("button", { name: "Submit privately" }).click();
+    // A required answer is missing, so the form stays on step 1.
+    await page.getByRole("button", { name: "Continue" }).click();
 
     await expect(page.getByRole("alert")).toBeVisible();
+    await expect(page.getByText("Choose current or former client.")).toBeVisible();
     await expect(page.getByLabel("Coach or team name")).toHaveValue("Some Coach");
   });
 });

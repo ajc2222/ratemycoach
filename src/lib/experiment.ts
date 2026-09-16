@@ -13,6 +13,8 @@ export interface VariantDefinition {
   id: "a" | "b";
   label: string;
   headline: string;
+  /** A phrase inside `headline` that the hero draws attention to. */
+  highlight: string;
   subhead: string;
 }
 
@@ -21,6 +23,7 @@ export const VARIANTS: Record<"a" | "b", VariantDefinition> = {
     id: "a",
     label: "A — Research before committing",
     headline: "Research your bodybuilding coach before committing to prep.",
+    highlight: "bodybuilding coach",
     subhead:
       "Discover coaching specialties, pricing, client experiences, communication standards, and public discussions in one independent place.",
   },
@@ -28,6 +31,7 @@ export const VARIANTS: Record<"a" | "b", VariantDefinition> = {
     id: "b",
     label: "B — Real experiences, not photos",
     headline: "Real coaching experiences—not just transformation photos.",
+    highlight: "coaching experiences",
     subhead:
       "Discover coaching specialties, pricing, client experiences, communication standards, and public discussions in one independent place.",
   },

@@ -15,13 +15,25 @@ export const metadata: Metadata = {
 
 function DirectorySkeleton() {
   return (
-    <div className="container-page py-8 sm:py-12">
-      <div className="bg-surface-2 h-9 w-2/3 max-w-md rounded" />
-      <div className="bg-surface mt-4 h-5 w-full max-w-2xl rounded" />
-      <div className="bg-surface mt-6 h-12 w-full rounded-[var(--radius-control)]" />
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <div key={index} className="bg-surface h-64 rounded-[var(--radius-card)]" />
+    <div className="container-page py-8 sm:py-12" aria-busy="true">
+      <div className="skeleton h-4 w-24" />
+      <div className="skeleton mt-3 h-11 w-2/3 max-w-md" />
+      <div className="skeleton mt-4 h-5 w-full max-w-2xl" />
+      <div className="skeleton mt-6 h-12 w-full" />
+      <div className="mt-8 grid gap-5 md:grid-cols-2 lg:ml-72">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div
+            key={index}
+            className="border-line bg-surface flex gap-4 rounded-[6px] border p-5"
+          >
+            <div className="skeleton size-[4.5rem] shrink-0" />
+            <div className="flex-1 space-y-2.5">
+              <div className="skeleton h-5 w-2/3" />
+              <div className="skeleton h-4 w-1/2" />
+              <div className="skeleton h-4 w-full" />
+              <div className="skeleton h-4 w-4/5" />
+            </div>
+          </div>
         ))}
       </div>
       <span className="sr-only">Loading the directory…</span>

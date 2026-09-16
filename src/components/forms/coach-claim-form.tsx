@@ -111,7 +111,7 @@ export function CoachClaimForm() {
         </p>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="field-row grid gap-5 sm:grid-cols-2">
         <TextField
           name="coach_name"
           label="Your name"
@@ -184,7 +184,7 @@ export function CoachClaimForm() {
         <RadioGroup name="focus" options={FOCUSES} columns={2} />
       </FieldSet>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="field-row grid gap-5 sm:grid-cols-2">
         <SelectField
           name="monthly_price_band"
           label="Typical monthly price"

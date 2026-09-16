@@ -7,16 +7,18 @@ export function cx(...values: (string | false | null | undefined)[]): string {
 }
 
 const BUTTON_BASE =
-  "inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] font-semibold " +
-  "transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-60 " +
+  "inline-flex items-center justify-center gap-2 rounded-[6px] font-bold " +
+  "disabled:cursor-not-allowed disabled:opacity-60 " +
   // 44px minimum target (WCAG 2.5.8)
   "min-h-11 px-5 py-2.5 text-center";
 
+/** Primary and secondary use the hard-offset treatment (see `.btn-hard`). */
 const VARIANTS = {
-  primary: "bg-accent text-accent-ink hover:bg-accent-hover",
-  secondary: "border border-line-strong bg-surface text-paper hover:bg-surface-2",
-  ghost: "text-paper hover:bg-surface-2",
-  quiet: "text-accent hover:text-accent-hover underline underline-offset-4 min-h-0 px-0 py-1",
+  primary: "btn-hard bg-accent text-accent-ink hover:bg-accent-hover",
+  secondary: "btn-hard bg-surface text-paper",
+  ghost: "text-paper transition-colors hover:bg-surface-2",
+  quiet:
+    "text-accent transition-colors hover:text-accent-hover underline underline-offset-4 min-h-0 px-0 py-1",
 } as const;
 
 export type ButtonVariant = keyof typeof VARIANTS;
@@ -46,17 +48,19 @@ export function Chip({
   tone?: "neutral" | "accent" | "demo" | "ok" | "muted";
   className?: string;
 }) {
+  // Uppercase grey tags, RateMyProfessors-style. The demo marker keeps its
+  // sentence case so it reads the same to people and to text-matching tools.
   const tones = {
-    neutral: "border-line bg-surface-2 text-muted",
-    accent: "border-accent/40 bg-accent/10 text-accent",
-    demo: "border-demo/50 bg-demo-bg text-demo",
-    ok: "border-ok/40 bg-ok-bg text-ok",
-    muted: "border-line bg-transparent text-subtle",
+    neutral: "bg-surface-2 text-paper uppercase tracking-[0.05em]",
+    accent: "bg-accent-soft text-accent uppercase tracking-[0.05em]",
+    demo: "bg-demo-bg text-demo",
+    ok: "bg-ok-bg text-ok uppercase tracking-[0.05em]",
+    muted: "bg-transparent text-subtle ring-1 ring-line ring-inset uppercase tracking-[0.05em]",
   } as const;
   return (
     <span
       className={cx(
-        "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium whitespace-nowrap",
+        "inline-flex items-center gap-1 rounded-full px-3 py-1 text-[0.6875rem] font-bold whitespace-nowrap",
         tones[tone],
         className,
       )}
@@ -82,7 +86,7 @@ export function DemoBanner({ className }: { className?: string }) {
   return (
     <div
       className={cx(
-        "border-demo/40 bg-demo-bg flex items-start gap-3 rounded-[var(--radius-card)] border px-4 py-3",
+        "border-demo/30 bg-demo-bg flex items-start gap-3 rounded-[var(--radius-card)] border px-4 py-3",
         className,
       )}
     >
@@ -113,7 +117,7 @@ export function Card({
   return (
     <Tag
       className={cx(
-        "border-line bg-surface rounded-[var(--radius-card)] border p-5 sm:p-6",
+        "border-line bg-surface rounded-[var(--radius-card)] border p-5 shadow-[var(--shadow-card)] sm:p-6",
         className,
       )}
     >
@@ -138,11 +142,11 @@ export function SectionHeading({
   return (
     <div className={cx("max-w-2xl", className)}>
       {eyebrow ? (
-        <p className="text-accent mb-2 text-xs font-semibold tracking-[0.18em] uppercase">
+        <p className="text-accent mb-3 text-xs font-bold tracking-[0.16em] uppercase">
           {eyebrow}
         </p>
       ) : null}
-      <h2 id={id} className="text-2xl sm:text-3xl">
+      <h2 id={id} className="text-[1.75rem] sm:text-4xl">
         {title}
       </h2>
       {lead ? <p className="text-muted mt-3">{lead}</p> : null}
@@ -150,18 +154,61 @@ export function SectionHeading({
   );
 }
 
-/** Prelaunch disclosure. Appears in the header of every page. */
-export function PrelaunchPill({ className }: { className?: string }) {
+/**
+ * Prelaunch disclosure. `onNavy` is the variant used inside dark bands such as
+ * the hero, where the light-ground colours would disappear.
+ */
+export function PrelaunchPill({
+  className,
+  onNavy = false,
+}: {
+  className?: string;
+  onNavy?: boolean;
+}) {
   return (
     <span
       className={cx(
-        "border-line bg-surface text-2xs text-muted inline-flex items-center gap-2 rounded-full border px-3 py-1 font-medium tracking-wide uppercase",
+        "text-2xs inline-flex items-center gap-2 rounded-full border px-3 py-1 font-semibold tracking-wide uppercase",
+        onNavy ? "border-on-navy/25 text-on-navy-muted" : "border-line bg-surface text-muted",
         className,
       )}
     >
-      <span aria-hidden="true" className="bg-accent size-1.5 rounded-full" />
+      <span aria-hidden="true" className="bg-accent-bright pulse-dot size-1.5 rounded-full" />
       Early validation — not yet launched
     </span>
+  );
+}
+
+/**
+ * The RateMyProfessors-style score square. Until real, verified reviews exist
+ * it only ever renders the empty state — there is no prop for a number on
+ * purpose, so a fabricated score cannot be passed in by accident.
+ */
+export function ScoreBlock({
+  label = "Overall",
+  size = "md",
+  className,
+}: {
+  label?: string;
+  size?: "md" | "lg";
+  className?: string;
+}) {
+  return (
+    <div className={cx("shrink-0 text-center", className)}>
+      <p className="text-paper mb-1.5 text-[0.6875rem] font-extrabold tracking-[0.08em] uppercase">
+        {label}
+      </p>
+      <div
+        className={cx(
+          "bg-surface-2 text-subtle grid place-items-center rounded-[3px] font-extrabold",
+          size === "lg" ? "size-24 text-5xl" : "size-[4.5rem] text-4xl",
+        )}
+      >
+        <span aria-hidden="true">—</span>
+        <span className="sr-only">No rating</span>
+      </div>
+      <p className="text-subtle mt-1.5 text-xs leading-tight">No reviews yet</p>
+    </div>
   );
 }
 

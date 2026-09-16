@@ -152,7 +152,7 @@ export function WaitlistForm({
         error={state.fieldErrors.email}
       />
 
-      <div className={cx("grid gap-5", !compact && "sm:grid-cols-2")}>
+      <div className={cx("field-row grid gap-5", !compact && "sm:grid-cols-2")}>
         <SelectField
           name="role"
           label="Which best describes you?"
@@ -198,7 +198,7 @@ export function WaitlistForm({
           ) : null}
 
           {!triggerCoachName ? (
-            <div className={cx("grid gap-5", !compact && "sm:grid-cols-2")}>
+            <div className={cx("field-row grid gap-5", !compact && "sm:grid-cols-2")}>
               <TextField
                 name="coach_searched"
                 label="A coach you're researching"
@@ -235,7 +235,7 @@ export function WaitlistForm({
             />
           </FieldSet>
 
-          <div className={cx("grid gap-5", !compact && "sm:grid-cols-2")}>
+          <div className={cx("field-row grid gap-5", !compact && "sm:grid-cols-2")}>
             <SelectField
               name="budget_band"
               label="Budget you have in mind"

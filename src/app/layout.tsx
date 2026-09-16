@@ -1,10 +1,18 @@
 import type { Metadata, Viewport } from "next";
+import { Poppins } from "next/font/google";
 
 import { FeatureGateProvider } from "@/components/feature-gate";
-import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { MobileTabBar, SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { site } from "@/lib/site";
 
 import "./globals.css";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -37,8 +45,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0e0f11",
-  colorScheme: "dark",
+  themeColor: "#0f1b3d",
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
 };
@@ -66,8 +74,9 @@ const organizationJsonLd = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="h-full">
-      <body className="flex min-h-full flex-col">
+    <html lang="en" className={`${poppins.variable} h-full`}>
+      {/* Bottom padding keeps the footer clear of the mobile tab bar. */}
+      <body className="flex min-h-full flex-col pb-[calc(4rem+env(safe-area-inset-bottom))] lg:pb-0">
         <a
           href="#main"
           className="bg-accent text-accent-ink sr-only rounded-[var(--radius-control)] px-4 py-2 font-semibold focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50"
@@ -80,6 +89,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {children}
           </main>
           <SiteFooter />
+          <MobileTabBar />
         </FeatureGateProvider>
         <script
           type="application/ld+json"

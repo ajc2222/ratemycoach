@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { CoachCard } from "@/components/coach-card";
+import { CoachSearchField } from "@/components/coach-search";
 import { Dialog } from "@/components/ui/dialog";
 import { Button, ButtonLink, Card, cx } from "@/components/ui/primitives";
 import { DEMO_COACHES } from "@/data/demo-coaches";
@@ -82,7 +83,9 @@ function FilterControls({
         const selected = (filters[facet.key] as string[] | undefined) ?? [];
         return (
           <fieldset key={facet.key}>
-            <legend className="text-paper mb-2 text-sm font-semibold">{facet.legend}</legend>
+            <legend className="text-paper mb-2 text-xs font-extrabold tracking-[0.1em] uppercase">
+              {facet.legend}
+            </legend>
             {facet.hint ? <p className="text-subtle mb-2 text-xs">{facet.hint}</p> : null}
             <div className="flex flex-wrap gap-2">
               {facet.options.map((option) => {
@@ -93,10 +96,10 @@ function FilterControls({
                     key={option.value}
                     htmlFor={id}
                     className={cx(
-                      "inline-flex min-h-11 cursor-pointer items-center rounded-full border px-3.5 py-1.5 text-sm transition-colors",
+                      "inline-flex min-h-11 cursor-pointer items-center rounded-full border-2 px-3.5 py-1.5 text-sm font-semibold transition-[background-color,border-color,color,box-shadow,transform] duration-150 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-[var(--color-accent)]",
                       checked
-                        ? "border-accent bg-accent/10 text-accent"
-                        : "border-line bg-ink text-muted hover:border-muted hover:text-paper",
+                        ? "border-paper bg-accent text-accent-ink -translate-x-px -translate-y-px shadow-[2px_2px_0_var(--color-paper)]"
+                        : "border-line bg-surface text-paper hover:border-paper",
                     )}
                   >
                     <input
@@ -271,7 +274,10 @@ export function Directory() {
   return (
     <div className="container-page py-8 sm:py-12">
       <div className="max-w-2xl">
-        <h1 className="text-3xl sm:text-4xl">Coach directory preview</h1>
+        <p className="text-accent mb-2 text-xs font-bold tracking-[0.16em] uppercase">
+          Find a coach
+        </p>
+        <h1 className="text-4xl sm:text-5xl">Coach directory preview</h1>
         <p className="text-muted mt-3">
           Search and filtering are live, running against{" "}
           <strong className="text-paper">
@@ -285,30 +291,23 @@ export function Directory() {
       <form
         onSubmit={handleSubmit}
         role="search"
-        className="mt-6 flex flex-col gap-3 sm:flex-row"
+        className="relative mt-6 flex flex-col gap-3 sm:flex-row sm:items-center"
       >
-        <div className="flex-1">
-          <label htmlFor="directory-search" className="sr-only">
-            Search by coach, team, Instagram, or TikTok handle
-          </label>
-          <input
-            id="directory-search"
-            type="search"
-            name="q"
-            value={queryInput}
-            onChange={(event) => {
-              setQueryInput(event.currentTarget.value);
-              if (!searchStarted.current) {
-                searchStarted.current = true;
-                track("hero_search_started", { page: "/coaches", source: "directory" });
-              }
-            }}
-            placeholder="Search by coach, team, Instagram, or TikTok handle"
-            autoComplete="off"
-            className="border-line-strong bg-surface text-paper placeholder:text-subtle hover:border-muted focus:border-accent min-h-12 w-full rounded-[var(--radius-control)] border px-4 py-3"
-          />
-        </div>
-        <Button type="submit" className="sm:w-auto">
+        <CoachSearchField
+          id="directory-search"
+          className="flex-1"
+          anchorToForm
+          value={queryInput}
+          onValueChange={setQueryInput}
+          onInput={() => {
+            if (!searchStarted.current) {
+              searchStarted.current = true;
+              track("hero_search_started", { page: "/coaches", source: "directory" });
+            }
+          }}
+          source="directory-suggestion"
+        />
+        <Button type="submit" className="min-h-12 sm:w-auto sm:px-7">
           Search
         </Button>
       </form>
@@ -318,7 +317,7 @@ export function Directory() {
         <aside className="hidden w-64 shrink-0 lg:block" aria-label="Filters">
           <div className="sticky top-20">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="font-display text-lg">Filters</h2>
+              <h2 className="text-lg">Filters</h2>
               {activeFilterCount > 0 || hasQuery ? (
                 <button
                   type="button"
@@ -362,7 +361,7 @@ export function Directory() {
 
           {zeroResults ? (
             <Card className="text-center">
-              <h2 className="font-display text-2xl">We don&apos;t have this coach yet.</h2>
+              <h2 className="text-2xl">We don&apos;t have this coach yet.</h2>
               <p className="text-muted mx-auto mt-3 max-w-md">
                 {hasQuery ? (
                   <>
@@ -389,7 +388,7 @@ export function Directory() {
               </div>
             </Card>
           ) : (
-            <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <ul className="grid gap-5 md:grid-cols-2">
               {results.map((coach, index) => (
                 <CoachCard key={coach.id} coach={coach} position={index + 1} />
               ))}
@@ -397,7 +396,7 @@ export function Directory() {
           )}
 
           {!zeroResults ? (
-            <Card className="mt-6 border-dashed">
+            <Card className="border-line-strong mt-6 border-2 border-dashed shadow-none">
               <p className="text-muted text-sm">
                 <strong className="text-paper">Looking for a specific coach?</strong> These are
                 demonstrations, not real listings. Tell us who you were hoping to research and

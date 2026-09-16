@@ -11,7 +11,7 @@ import {
   SocialLinks,
 } from "@/components/coach-profile-actions";
 import { PageViewTracker } from "@/components/page-view-tracker";
-import { Card, Chip, DemoBanner } from "@/components/ui/primitives";
+import { Card, Chip, DemoBanner, ScoreBlock } from "@/components/ui/primitives";
 import { DEMO_COACHES, getDemoCoach } from "@/data/demo-coaches";
 import { priceRangeLabel } from "@/lib/search";
 import {
@@ -65,7 +65,7 @@ export default async function CoachProfilePage({ params }: PageProps<"/coaches/[
       />
 
       <nav aria-label="Breadcrumb" className="mb-6 text-sm">
-        <Link href="/coaches" className="text-muted hover:text-paper">
+        <Link href="/coaches" className="text-muted hover:text-paper font-semibold">
           ← Directory preview
         </Link>
       </nav>
@@ -75,10 +75,15 @@ export default async function CoachProfilePage({ params }: PageProps<"/coaches/[
       <div className="grid gap-10 lg:grid-cols-3 lg:gap-12">
         <div className="lg:col-span-2">
           <header className="flex flex-col gap-5 sm:flex-row sm:items-start">
-            <CoachAvatar initials={coach.initials} size="lg" />
-            <div className="min-w-0">
-              <h1 className="font-display text-3xl sm:text-4xl">{coach.name}</h1>
-              {coach.team ? <p className="text-muted mt-1 text-lg">{coach.team}</p> : null}
+            <ScoreBlock size="lg" className="order-last sm:order-first" />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-3">
+                <CoachAvatar initials={coach.initials} />
+                <h1 className="text-4xl sm:text-5xl">{coach.name}</h1>
+              </div>
+              {coach.team ? (
+                <p className="text-muted mt-2 text-lg font-medium">{coach.team}</p>
+              ) : null}
               <p className="text-subtle mt-1 text-sm">
                 {coach.location} · {coach.yearsCoaching} years coaching (demonstration data)
               </p>
@@ -99,14 +104,14 @@ export default async function CoachProfilePage({ params }: PageProps<"/coaches/[
           </header>
 
           <section className="mt-10" aria-labelledby="about">
-            <h2 id="about" className="font-display text-xl">
+            <h2 id="about" className="text-2xl">
               About this coach
             </h2>
             <p className="text-muted mt-3">{coach.bio}</p>
           </section>
 
           <section className="mt-10" aria-labelledby="details">
-            <h2 id="details" className="font-display text-xl">
+            <h2 id="details" className="text-2xl">
               Coaching details
             </h2>
             <dl className="mt-4">
@@ -165,7 +170,7 @@ export default async function CoachProfilePage({ params }: PageProps<"/coaches/[
         <aside className="lg:col-span-1">
           <div className="lg:sticky lg:top-20">
             <Card>
-              <h2 className="font-display text-lg">Actions</h2>
+              <h2 className="text-lg">Actions</h2>
               <p className="text-muted mt-2 mb-4 text-sm">
                 These are the things you&apos;ll be able to do here. Two of them work today.
               </p>

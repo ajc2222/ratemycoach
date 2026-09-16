@@ -14,12 +14,13 @@ import type { Option } from "@/lib/taxonomy";
  * given a `defaultChecked`.
  */
 
+/** Bold outline with an offset shadow that turns coral on focus (`.control-hard`). */
 const CONTROL =
-  "w-full rounded-[var(--radius-control)] border bg-ink px-3.5 py-2.5 text-paper " +
-  "placeholder:text-subtle transition-colors min-h-11 " +
-  "border-line-strong hover:border-muted focus:border-accent";
+  "control-hard w-full rounded-[4px] bg-surface px-3.5 py-2.5 font-medium text-paper " +
+  "placeholder:font-normal placeholder:text-subtle min-h-12";
 
-const CONTROL_ERROR = "border-danger hover:border-danger focus:border-danger";
+// `.control-hard[aria-invalid]` supplies the red edge; this keeps the class list explicit.
+const CONTROL_ERROR = "border-danger";
 
 function Hint({ id, children }: { id: string; children: ReactNode }) {
   return (
@@ -50,14 +51,21 @@ export function FieldLabel({
   optional?: boolean;
 }) {
   return (
-    <label htmlFor={htmlFor} className="text-paper mb-1.5 block text-sm font-semibold">
+    <label
+      htmlFor={htmlFor}
+      className="text-paper mb-2 block text-xs font-extrabold tracking-[0.1em] uppercase"
+    >
       {children}
       {required ? (
         <span className="text-accent ml-1" aria-hidden="true">
           *
         </span>
       ) : null}
-      {optional ? <span className="text-subtle ml-2 font-normal">Optional</span> : null}
+      {optional ? (
+        <span className="text-subtle ml-2 font-semibold tracking-normal normal-case">
+          Optional
+        </span>
+      ) : null}
     </label>
   );
 }
@@ -176,7 +184,7 @@ export function SelectField({
         className={cx(CONTROL, "appearance-none pr-10", error && CONTROL_ERROR)}
         style={{
           backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23A7A79E' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>\")",
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%230F1B3D' stroke-width='2' fill='none' stroke-linecap='round'/></svg>\")",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "right 0.9rem center",
         }}
@@ -219,7 +227,7 @@ export function CheckboxField({
           required={required}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy || undefined}
-          className="mt-0.5 size-5 shrink-0 cursor-pointer accent-[var(--color-accent)]"
+          className="mt-0.5 size-5 shrink-0 cursor-pointer rounded-[3px] accent-[var(--color-accent)]"
           {...rest}
         />
         <label htmlFor={id} className="text-paper cursor-pointer text-sm leading-relaxed">
@@ -268,7 +276,7 @@ export function FieldSet({
       aria-invalid={error ? true : undefined}
       aria-describedby={error ? errorId : undefined}
     >
-      <legend className="text-paper mb-1.5 text-sm font-semibold">
+      <legend className="text-paper mb-2 text-xs font-extrabold tracking-[0.1em] uppercase">
         {legend}
         {required ? (
           <span className="text-accent ml-1" aria-hidden="true">
@@ -297,7 +305,7 @@ export function RadioGroup({
       {options.map((option) => (
         <label
           key={option.value}
-          className="border-line bg-ink hover:border-muted has-checked:border-accent has-checked:bg-accent/5 flex min-h-11 cursor-pointer items-center gap-3 rounded-[var(--radius-control)] border px-3.5 py-2 text-sm"
+          className="tile-hard bg-surface flex min-h-11 cursor-pointer items-center gap-3 rounded-[4px] px-3.5 py-2 text-sm font-medium"
         >
           <input
             type="radio"
@@ -332,7 +340,7 @@ export function CheckboxGroup({
       {options.map((option) => (
         <label
           key={option.value}
-          className="border-line bg-ink hover:border-muted has-checked:border-accent has-checked:bg-accent/5 flex min-h-11 cursor-pointer items-center gap-3 rounded-[var(--radius-control)] border px-3.5 py-2 text-sm"
+          className="tile-hard bg-surface flex min-h-11 cursor-pointer items-center gap-3 rounded-[4px] px-3.5 py-2 text-sm font-medium"
         >
           <input
             type="checkbox"
@@ -366,7 +374,7 @@ export function RatingField({
   const errorId = `${id}-error`;
   return (
     <fieldset aria-describedby={error ? errorId : undefined}>
-      <legend className="text-paper mb-1.5 text-sm font-semibold">
+      <legend className="text-paper mb-2 text-xs font-extrabold tracking-[0.1em] uppercase">
         {label}
         {required ? (
           <span className="text-accent ml-1" aria-hidden="true">
@@ -379,7 +387,7 @@ export function RatingField({
         {[1, 2, 3, 4, 5].map((value) => (
           <label
             key={value}
-            className="border-line bg-ink hover:border-muted has-checked:border-accent has-checked:bg-accent has-checked:text-accent-ink flex size-11 cursor-pointer items-center justify-center rounded-[var(--radius-control)] border text-sm font-semibold"
+            className="tile-hard bg-surface has-checked:bg-accent has-checked:text-accent-ink flex size-11 cursor-pointer items-center justify-center rounded-[4px] text-sm font-bold"
           >
             <input type="radio" name={name} value={value} className="sr-only" />
             <span aria-hidden="true">{value}</span>
@@ -425,7 +433,7 @@ export function FormError({ message }: { message: string | null }) {
   return (
     <div
       role="alert"
-      className="border-danger/50 bg-danger-bg text-danger rounded-[var(--radius-control)] border px-4 py-3 text-sm"
+      className="border-danger bg-danger-bg text-danger rounded-[4px] border-2 px-4 py-3 text-sm font-medium"
     >
       {message}
     </div>

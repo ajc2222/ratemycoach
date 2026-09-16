@@ -16,19 +16,65 @@ import type { DemoCoach } from "@/data/demo-coaches";
  */
 
 const GATE_BUTTON =
-  "inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[var(--radius-control)] " +
-  "border border-line-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-paper " +
-  "transition-colors hover:border-accent hover:text-accent";
+  "btn-hard inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-[6px] " +
+  "bg-surface px-4 py-2.5 text-sm font-bold text-paper";
+
+const RATING_ROWS = ["Excellent 5", "Great 4", "Good 3", "Poor 2", "Awful 1"];
+
+/**
+ * The RateMyProfessors-style breakdown, in the only state it can honestly
+ * show today: empty. It exists so visitors can see what will be measured.
+ */
+function RatingBreakdown() {
+  return (
+    <div className="border-line bg-ink mt-5 grid gap-6 rounded-xl border p-5 sm:grid-cols-[auto_1fr] sm:gap-8">
+      <div>
+        <p className="text-subtle text-6xl leading-none font-extrabold tracking-tight">
+          <span aria-hidden="true">—</span>
+          <span className="sr-only">No overall rating</span>
+          <span className="text-muted ml-1 text-xl font-semibold" aria-hidden="true">
+            /5
+          </span>
+        </p>
+        <p className="text-muted mt-2 text-sm">Overall quality · nothing published</p>
+        <dl className="mt-4 flex gap-6">
+          {["would hire again", "communication"].map((label) => (
+            <div key={label} className="flex flex-col-reverse">
+              <dt className="text-subtle text-xs">{label}</dt>
+              <dd className="text-subtle text-2xl font-extrabold">
+                <span aria-hidden="true">—</span>
+                <span className="sr-only">Not rated</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <dl className="space-y-2" aria-label="Rating distribution">
+        {RATING_ROWS.map((row) => (
+          <div
+            key={row}
+            className="grid grid-cols-[5.5rem_1fr_2.5rem] items-center gap-3 text-sm"
+          >
+            <dt className="text-muted">{row}</dt>
+            <dd className="bg-surface-2 h-5" aria-hidden="true" />
+            <dd className="text-subtle text-right text-xs">none</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
 
 export function ReviewEvidenceCard({ coach }: { coach: DemoCoach }) {
   return (
-    <Card className="border-dashed">
+    <Card className="border-line-strong border-2 border-dashed shadow-none">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-display text-xl">Client reviews</h2>
-        <span className="border-line bg-ink text-subtle rounded-full border px-2.5 py-0.5 text-xs">
+        <h2 className="text-xl">Client reviews</h2>
+        <span className="bg-surface-2 text-paper rounded-full px-3 py-1 text-[0.6875rem] font-bold tracking-[0.05em] uppercase">
           Not collected yet
         </span>
       </div>
+      <RatingBreakdown />
       <p className="text-muted mt-3 text-sm">
         This is where firsthand reviews from former clients will appear — structured ratings for
         communication, personalisation and value, plus written accounts of what the coaching was
@@ -67,10 +113,10 @@ export function ReviewEvidenceCard({ coach }: { coach: DemoCoach }) {
 
 export function AiSummaryCard({ coach }: { coach: DemoCoach }) {
   return (
-    <Card className="border-dashed">
+    <Card className="border-line-strong border-2 border-dashed shadow-none">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-display text-xl">Public-source summary</h2>
-        <span className="border-line bg-ink text-subtle rounded-full border px-2.5 py-0.5 text-xs">
+        <h2 className="text-xl">Public-source summary</h2>
+        <span className="bg-surface-2 text-paper rounded-full px-3 py-1 text-[0.6875rem] font-bold tracking-[0.05em] uppercase">
           Not generated yet
         </span>
       </div>
@@ -219,7 +265,7 @@ export function OutboundSocialLink({
 export function ProfileFooterCta() {
   return (
     <Card className="mt-8">
-      <h2 className="font-display text-xl">Researching a real coach?</h2>
+      <h2 className="text-xl">Researching a real coach?</h2>
       <p className="text-muted mt-2 text-sm">
         Every profile on this site is a demonstration. Tell us which coach you actually wanted
         to look up — that&apos;s how we decide who to research first.
